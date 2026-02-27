@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="30dp"
+    tools:context=".AddDetailsActivity">
+
+    <TextView
+        android:id="@+id/tvLocationNameHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Location:"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvLocationName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:textSize="18sp"
+        app:layout_constraintBaseline_toBaselineOf="@id/tvLocationNameHeader"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/tvLocationNameHeader"
+        tools:text="Specific Building Name" />
+
+    <TextView
+        android:id="@+id/tvLocationCoords"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="@id/tvLocationNameHeader"
+        app:layout_constraintTop_toBottomOf="@id/tvLocationNameHeader"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:text="Lat: 12.345, Lon: 67.890" />
+
+    <Button
+        android:id="@+id/btnSelectFloorMap"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Select Floor Map Image"
+        app:layout_constraintTop_toBottomOf="@id/tvLocationCoords"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <java.com.example.ins.HighlightingSubsamplingScaleImageView
+        android:id="@+id/ivFloorMapPreview"
+        android:layout_width="0dp"
+        android:layout_height="250dp" android:layout_marginTop="8dp"
+        android:background="#E0E0E0"
+        app:layout_constraintTop_toBottomOf="@id/btnSelectFloorMap"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+        <!-- For image highlighting later, consider wrapping this in a FrameLayout -->
+
+
+    <Button
+        android:id="@+id/btnProcessMap"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Process Map &amp; Edit Details"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/ivFloorMapPreview"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <TextView
+        android:id="@+id/tvExtractedDetailsHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="Editable Extracted Details:"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/btnProcessMap"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <!-- RecyclerView for editable OCR items -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvOcrResults"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="4dp"
+        android:background="@drawable/border_outline"
+        android:padding="4dp"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/tvExtractedDetailsHeader"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/btnAddCustomPoint"
+        app:layout_constraintHeight_default="wrap"
+        app:layout_constraintHeight_min="100dp"
+        app:layout_constraintVertical_bias="0.0"
+        tools:listitem="@layout/item_ocr_element" />
+
+    <!-- This is the original "Add Custom Label" button -->
+    <Button
+        android:id="@+id/btnAddCustomPoint"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Add Custom Label"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="4dp"
+        android:visibility="gone"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btnDrawWalkableArea"
+        app:layout_constraintBottom_toTopOf="@+id/layoutActionButtons" />
+
+    <!-- This is the NEW, CORRECTLY CONSTRAINED "Draw Walkable Area" button -->
+    <Button
+        android:id="@+id/btnDrawWalkableArea"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Draw Walkable Area"
+        android:layout_marginStart="4dp"
+        android:visibility="gone"
+        app:layout_constraintStart_toEndOf="@+id/btnAddCustomPoint"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/btnAddCustomPoint"
+        app:layout_constraintBottom_toBottomOf="@+id/btnAddCustomPoint" />
+
+
+
+
+
+    <!-- Action Buttons -->
+    <LinearLayout
+        android:id="@+id/layoutActionButtons"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="16dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <Button
+            android:id="@+id/btnSaveMapDetails"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginEnd="4dp"
+            android:text="Save Map" />
+
+        <Button
+            android:id="@+id/btnUpdateMapDetails"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
+            android:text="Update"
+            android:visibility="gone"/>
+
+        <Button
+            android:id="@+id/btnCancelMapUpload"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="4dp"
+            style="?attr/materialButtonOutlinedStyle"
+            android:text="Cancel" />
+    </LinearLayout>
+
+    <!-- RecyclerView for previously uploaded maps - not directly part of this step's focus
+         but kept for layout completeness. Ensure its constraints don't conflict.
+         For this example, I'm removing it to simplify focus on OCR editing UI.
+         If you need it, ensure it's constrained correctly, perhaps below layoutActionButtons
+         or in a different part of a ScrollView.
+    -->
+    <!--
+    <TextView
+        android:id="@+id/tvUploadedMapsHeader" ... />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvUploadedMaps" ... />
+    -->
+
+</androidx.constraintlayout.widget.ConstraintLayout>

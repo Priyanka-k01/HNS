@@ -1,0 +1,71 @@
+package java.com.example.ins
+
+
+import android.os.Bundle
+import android.widget.Button
+import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import org.osmdroid.views.MapView
+import org.osmdroid.views.overlay.Marker
+import org.osmdroid.config.Configuration
+
+class SimpleLocActivity : AppCompatActivity() {
+
+    private var mapView: MapView? = null
+    private var tglBtn: Button? = null
+    private var isSatellite = false // Default to non-sattel
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+
+        super.onCreate(savedInstanceState)
+        Configuration.getInstance().load(applicationContext,getSharedPreferences("osmdroid", MODE_PRIVATE))
+        //enableEdgeToEdge()
+        setContentView(R.layout.activity_simple_loc)
+
+        mapView = findViewById(R.id.mapViewSimpleLoc)
+        tglBtn = findViewById(R.id.tglBtn)
+        createMap()
+
+
+        tglBtn?.setOnClickListener {
+            if (isSatellite) {
+                mapView?.setTileSource(org.osmdroid.tileprovider.tilesource.TileSourceFactory.MAPNIK)
+                tglBtn?.text = "Satellite view"
+            } else {
+                mapView?.setTileSource(org.osmdroid.tileprovider.tilesource.TileSourceFactory.USGS_SAT)
+                tglBtn?.text = "Normal view"
+
+            }
+            isSatellite = !isSatellite
+        }
+    }
+    private fun createMap() {
+        mapView?.setTileSource(org.osmdroid.tileprovider.tilesource.TileSourceFactory.MAPNIK)
+        mapView?.setMultiTouchControls(true)
+        mapView?.controller?.setZoom(15.0)
+        val startPoint =
+            org.osmdroid.util.GeoPoint(15.8609, 74.5129) // Example: Eiffel Tower
+        mapView?.controller?.setCenter(startPoint)
+
+        var startMarker = Marker(mapView)
+        startMarker.position = startPoint
+        startMarker.title = "current location"
+        startMarker.subDescription = "This is the current location"
+        mapView?.overlays?.add(startMarker)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        mapView?.onPause()
+    }
+    override fun onResume() {
+        super.onResume()
+        mapView?.onResume()
+    }
+}
+
+
+

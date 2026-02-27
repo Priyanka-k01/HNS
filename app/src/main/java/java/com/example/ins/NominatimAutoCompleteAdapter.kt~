@@ -1,0 +1,124 @@
+package java.com.example.ins
+
+// Or your appropriate package
+
+import android.content.Context
+import android.location.Address
+import android.util.Log
+import android.widget.ArrayAdapter
+import android.widget.Filter
+import android.widget.Filterable
+import android.widget.TextView
+
+import org.osmdroid.bonuspack.location.GeocoderNominatim
+// No GeoPoint needed in this adapter for now, just fetching and displaying suggestions
+import java.io.IOException
+import java.util.Locale
+
+class NominatimAutoCompleteAdapter(
+    context: Context,
+    private val userAgent: String // Essential for Nominatim
+) : ArrayAdapter<NominatimAdapterSuggestion>(context, android.R.layout.simple_dropdown_item_1line), Filterable {
+
+    private var suggestionsList: MutableList<NominatimAdapterSuggestion> = mutableListOf()
+    // Create one GeocoderNominatim instance to reuse
+    private val geocoder = GeocoderNominatim(userAgent, Locale.getDefault())
+
+
+    override fun getCount(): Int = suggestionsList.size
+
+
+    override fun getItem(position: Int): NominatimAdapterSuggestion? = suggestionsList.getOrNull(position)
+
+
+    override fun getView(position: Int, convertView: android.view.View?, parent: android.view.ViewGroup): android.view.View {
+        val view = super.getView(position, convertView, parent)
+        val suggestion = getItem(position)
+        (view as TextView).text = suggestion?.displayName
+        return view
+    }
+
+
+    override fun getFilter(): Filter {
+        return object : Filter() {
+            override fun performFiltering(constraint: CharSequence?): FilterResults {
+                val results = FilterResults()
+                val fetchedSuggestions = mutableListOf<NominatimAdapterSuggestion>()
+
+
+                // The actual network call is here. This part is slow.
+                // Owner.kt will control how often this is called via debouncing.
+                if (constraint != null && constraint.length >= 2) { // Minimum 2 chars to trigger search
+                    val query = constraint.toString()
+                    Log.d("NominatimAdapter", "Filtering for: $query (API call)")
+
+
+                    try {
+                        // Get multiple results (e.g., up to 5 suggestions)
+                        val foundAddresses: List<Address>? = geocoder.getFromLocationName(query, 5)
+
+
+                        foundAddresses?.forEach { addr ->
+                            // Construct a display name
+                            val displayName = addr.extras?.getString("display_name")
+                                ?: formatAddressForDisplay(addr) // Fallback formatting
+                            if (addr.hasLatitude() && addr.hasLongitude()) { // Only add if it has coordinates
+                                fetchedSuggestions.add(NominatimAdapterSuggestion(displayName, addr))
+                            }
+                        }
+                        Log.d("NominatimAdapter", "Found ${fetchedSuggestions.size} suggestions for '$query'")
+                    } catch (e: IOException) {
+                        Log.e("NominatimAdapter", "Geocoding IOException for '$query'", e)
+                        // Return empty list on network error
+                    } catch (e: Exception) {
+                        Log.e("NominatimAdapter", "Unexpected geocoding error for '$query'", e)
+                        // Return empty list on other errors
+                    }
+                }
+                // If constraint is null or too short, or if errors occurred, fetchedSuggestions will be empty.
+                results.values = fetchedSuggestions
+                results.count = fetchedSuggestions.size
+                return results
+            }
+
+
+            @Suppress("UNCHECKED_CAST")
+            override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
+                suggestionsList.clear()
+                if (results != null && results.count > 0) {
+                    // This cast is safe because performFiltering always sets results.values to List<NominatimAdapterSuggestion>
+                    suggestionsList.addAll(results.values as List<NominatimAdapterSuggestion>)
+                }
+
+
+                if (suggestionsList.isNotEmpty()) {
+                    notifyDataSetChanged()
+                } else {
+                    notifyDataSetInvalidated() // Clears the dropdown if no results
+                }
+            }
+
+
+            override fun convertResultToString(resultValue: Any?): CharSequence {
+                // This is what will be displayed in the AutoCompleteTextView when an item is selected from dropdown
+                return if (resultValue is NominatimAdapterSuggestion) {
+                    resultValue.displayName
+                } else {
+                    super.convertResultToString(resultValue)
+                }
+            }
+        }
+    }
+
+
+    // Helper to format address if display_name is not available (customize as needed)
+    private fun formatAddressForDisplay(address: Address): String {
+        val parts = mutableListOf<String?>()
+        parts.add(address.featureName ?: address.thoroughfare) // Street name or feature
+        parts.add(address.locality)     // City
+        parts.add(address.adminArea)    // State/Province
+        parts.add(address.countryName)
+        return parts.filterNotNull().filter { it.isNotEmpty() }.joinToString(", ")
+    }
+}
+

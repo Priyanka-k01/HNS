@@ -1,0 +1,24 @@
+<resources>
+    <!-- Your existing colors... -->
+
+    <color name="purple_200">#FFBB86FC</color> <!-- Often used as a light variant -->
+    <color name="purple_500">#FF6200EE</color> <!-- Often used as primary -->
+    <color name="purple_700">#FF3700B3</color> <!-- Often used as primaryVariant or for status bar -->
+
+    <color name="teal_200">#FF03DAC5</color> <!-- Often used as secondary -->
+    <color name="teal_700">#FF018786</color> <!-- Often used as secondaryVariant -->
+
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <!-- Adding the specific ones you asked for, ensuring no conflict with common Material names -->
+    <!-- If you are using the standard Material names as above, those are the ones to use. -->
+    <!-- If you specifically named yours slightly differently, or need them distinctly: -->
+
+    <color name="custom_teal_200">#80CBC4</color>
+    <color name="custom_teal_700">#00796B</color>
+    <color name="custom_purple_700">#7B1FA2</color> <!-- This is different from the typical Material purple_700 -->
+    <color name="highlight_color">#E0E0E0</color> <!-- A light grey -->
+
+
+</resources>

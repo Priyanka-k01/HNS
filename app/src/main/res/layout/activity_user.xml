@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    xmlns:tools="http://schemas.android.com/tools"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
+    android:paddingTop="8dp">
+
+
+    <!-- Search bar row -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+         android:orientation="horizontal"
+        android:padding="8dp">
+
+        <AutoCompleteTextView
+            android:id="@+id/autocomplete"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="Enter destination"
+
+            />
+
+        <Button
+            android:id="@+id/btn_s_loc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Search" />
+
+
+    </LinearLayout>
+
+
+
+
+
+    <!-- Map view -->
+    <org.osmdroid.views.MapView
+        android:id="@+id/U_mapViewUser"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <TextView
+        android:id="@+id/tv_distance_to_destination"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:gravity="center_horizontal"
+        android:textSize="16sp"
+        android:visibility="gone"
+        tools:text="Distance: 10.5 km" />
+
+
+    <Button
+        android:id="@+id/btn_indoor_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Indoor Navigation"
+        android:visibility="gone" />
+
+    <!-- Start Navigation button -->
+    <Button
+        android:id="@+id/btn_start_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="12dp"
+        android:text="Start Navigation"
+        android:visibility="gone" />
+
+</LinearLayout>

@@ -1,0 +1,97 @@
+ val roomVersion = "2.6.1" // Or check for the latest stable version of Room
+ val kotlinVersion = "2.0.21"
+
+plugins {
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
+    id("com.google.gms.google-services")
+
+
+
+
+
+
+
+}
+
+android {
+    namespace = "java.com.example.ins"
+    compileSdk = 36
+
+
+    defaultConfig {
+        applicationId = "java.com.example.ins"
+        minSdk = 25
+        targetSdk = 36
+        versionCode = 1
+        versionName = "1.0"
+
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+    buildFeatures {
+        viewBinding = true
+        buildConfig = true
+    }
+
+    buildTypes {
+        release {
+            isMinifyEnabled = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+        }
+    }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
+    }
+    kotlinOptions {
+        jvmTarget = "11"
+    }
+
+}
+
+dependencies {
+    implementation("com.github.bumptech.glide:glide:4.16.0") // Check for the latest version of Glide
+    // For SubsamplingScaleImageView (if you use it, highly recommended for maps)
+    implementation("com.davemorrissey.labs:subsampling-scale-image-view:3.10.0")
+
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3") // Or latest stable
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3") // Or latest stable
+    // For using .await() on Firebase Tasks (like .get().await())
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.3") // Or latest stable
+
+
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.material)
+    implementation(libs.androidx.activity)
+    implementation(libs.androidx.constraintlayout)
+    implementation(libs.play.services.location)
+
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
+    implementation("org.osmdroid:osmdroid-android:6.1.16")
+    implementation("com.github.MKergall:osmbonuspack:6.9.0")
+    implementation("androidx.preference:preference-ktx:1.2.1")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.3")
+    implementation("com.google.firebase:firebase-auth:22.3.1")
+    implementation("com.google.firebase:firebase-firestore:25.1.0")
+    implementation("com.google.firebase:firebase-storage:20.3.0")
+    implementation("com.google.android.material:material:1.11.0")
+    implementation("com.google.firebase:firebase-database:20.3.0")
+    implementation("com.google.mlkit:text-recognition:16.0.0") // Or check for the latest version
+    implementation("com.davemorrissey.labs:subsampling-scale-image-view:3.10.0")
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
+    implementation(platform("com.google.firebase:firebase-bom:34.2.0"))
+    implementation("com.google.firebase:firebase-analytics")
+
+
+
+
+
+}
